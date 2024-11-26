@@ -10,7 +10,9 @@ import 'package:spotify_clone/ui/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp();
+  };
   initServiceLocator();
   runApp(MultiBlocProvider(providers: [
     BlocProvider(create: (context) => AuthenticationBloc()),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotify_clone/constants/constants.dart';
+import 'package:spotify_clone/home_tiktok/for_you/for_you_video_screen.dart';
 import 'package:spotify_clone/ui/favorite_playlist_screen.dart';
 import 'package:spotify_clone/ui/home_screen.dart';
 import 'package:spotify_clone/ui/library_screen.dart';
@@ -18,7 +19,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      bottomNavigationBar: Container(
+      bottomNavigationBar:
+      Container(
         height: 64,
         width: MediaQuery.of(context).size.width,
         color: MyColors.blackColor.withOpacity(0.95),
@@ -64,7 +66,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   'images/icon_library_active.png',
                   color: MyColors.whiteColor,
                 ),
-                label: "Your Library",
+                label: "Video",
               ),
               BottomNavigationBarItem(
                 icon: Image.asset(
@@ -85,12 +87,13 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           ),
         ),
       ),
+
       body: IndexedStack(
         index: _currentIndex,
         children: const [
           HomeScreen(),
           SearchCategoryScreen(),
-          LibraryScreen(),
+          HomeScreen(),
           FavoritePlaylistScreen(),
         ],
       ),

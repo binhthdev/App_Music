@@ -1,7 +1,44 @@
 import 'package:spotify_clone/data/model/podcast.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 abstract class PodcastDatasource {
   Future<List<Podcast>> getPodcastList();
+  Future<String> getSongUrl(String fileName);
+  Future<String> getPodcastImageUrl(String imageName);
+}
+
+class PodcastFirebaseDatasource extends PodcastDatasource {
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+
+  @override
+  Future<String> getPodcastImageUrl(String imageName) async {
+    try {
+      final ref = _storage.ref().child('podcasts/$imageName');
+      final url = await ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      print("Lỗi khi tải URL hình ảnh podcast từ Firebase: $e");
+      return Future.error("Không thể tải hình ảnh podcast từ Firebase Storage. Vui lòng kiểm tra lại đường dẫn và quyền truy cập.");
+    }
+  }
+
+  @override
+  Future<String> getSongUrl(String fileName) async {
+    try {
+      final ref = _storage.ref().child('songs/$fileName');
+      final url = await ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      print("Lỗi khi tải URL bài hát từ Firebase: $e");
+      return Future.error("Không thể tải bài hát từ Firebase Storage. Vui lòng kiểm tra lại đường dẫn và quyền truy cập.");
+    }
+  }
+
+  @override
+  Future<List<Podcast>> getPodcastList() {
+    // Chưa triển khai, có thể thêm sau
+    throw UnimplementedError();
+  }
 }
 
 class PodcastLocalDatasource extends PodcastDatasource {
@@ -14,7 +51,7 @@ class PodcastLocalDatasource extends PodcastDatasource {
       ),
       Podcast(
         "The-Iced-coffe-hour.jpg",
-        "The Iced Coffe Hour",
+        "The Iced Coffee Hour",
       ),
       Podcast(
         "Startalk.jpg",
@@ -69,5 +106,16 @@ class PodcastLocalDatasource extends PodcastDatasource {
         "Hotboxin",
       ),
     ];
+  }
+
+  @override
+  Future<String> getSongUrl(String fileName) async {
+    // Không cần thiết cho LocalDatasource
+    return '';
+  }
+
+  @override
+  Future<String> getPodcastImageUrl(String imageName) async {
+    return '';
   }
 }
